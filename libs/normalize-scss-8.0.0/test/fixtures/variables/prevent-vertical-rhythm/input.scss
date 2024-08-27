@@ -1,0 +1,7 @@
+// This variable only affects output when vertical rhythm is used.
+$h2-font-size: 48px;
+// Force vertical rhythm off.
+$normalize-vertical-rhythm: false;
+
+@import 'normalize';
+@include normalize();
