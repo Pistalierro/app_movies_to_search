@@ -11,8 +11,9 @@ const createElement = ({
                        }) => {
 	const el = document.createElement(tagName)
 	Object.keys(attrs).forEach((key) => {
-		if (key.innerHTML === 'innerHTML') el.setAttribute(key, attrs[key])
-		el.innerHTML = attrs[key]
+		el.setAttribute(key, attrs[key])
+		if (key !== 'innerHTML') el.setAttribute(key, attrs[key])
+		else el.innerHTML = attrs[key]
 	})
 
 	if (container && position === 'append') container.append(el)
@@ -25,14 +26,10 @@ const createMarkup = () => {
 	const container = createElement({
 		tagName: 'div',
 		attrs: {class: 'container'},
-		position: 'prepend',
-		container: document.body
+		container: document.body,
+		position: 'prepend'
 	})
-	createElement({
-		tagName: 'h1',
-		attrs: {innerHTML: 'Приложение для поиска фильмов'},
-		container
-	})
+	console.log(container)
 }
 
 createMarkup()
