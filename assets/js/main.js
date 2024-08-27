@@ -3,7 +3,7 @@ const siteUrl = 'https://www.omdbapi.com/'
 let moviesList = null
 let inputSearch = null
 let searchLust = null
-let trigger = false
+let triggerMode = false
 
 const createElement = ({
 	                       tagName,
@@ -153,7 +153,9 @@ const createMarkup = () => {
 	createElement({
 		tagName: 'input',
 		attrs: {class: 'search__checkbox', type: 'checkbox', id: 'checkbox'},
-		container: searchBoxCheckBox
+		container: searchBoxCheckBox,
+		evt: 'click',
+		handler: () => triggerMode = !triggerMode
 	})
 	createElement({
 		tagName: 'label',
@@ -189,13 +191,14 @@ const addMoviesToList = (movie) => {
 createMarkup()
 createStyle()
 
-
 const getData = (url) => fetch(url)
 	.then(res => res.json())
 	.then(json => {
 		if (!json || !json.Search) throw Error('Сервер вернул не правильный объект')
 		return json.Search
 	})
+
+const clearMoviesMarkup = (el) => el && (el.innerHTML = '')
 
 const debounce = (() => {
 	let timer = 0
@@ -214,6 +217,7 @@ const inputSearchHandler = (e) => {
 
 	debounce(() => {
 		if (searchString && searchString.length > 3 && searchString !== searchLust) {
+			if (!triggerMode) clearMoviesMarkup(moviesList)
 			getData(`${siteUrl}?apikey=9ef2c1f1&s=${searchString}`)
 				.then(movies => movies.forEach(movie => addMoviesToList(movie)))
 				.catch(err => console.error(err));
